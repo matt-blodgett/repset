@@ -1,18 +1,18 @@
 <template>
-  <v-container class="px-2">
-    <templates-panel v-if="!hasActiveWorkout" @quick-start="hasActiveWorkout = true" />
-    <activity-panel v-if="hasActiveWorkout" />
-  </v-container>
+  <v-sheet>
+    <WorkoutTemplatesPanel v-if="!$store.state.workoutSession.isActive" />
+    <WorkoutSessionPanel v-if="$store.state.workoutSession.isActive" />
+  </v-sheet>
 </template>
 
 <script>
-import TemplatesPanel from '@/components/TemplatesPanel'
-import ActivityPanel from '@/components/ActivityPanel'
+import WorkoutTemplatesPanel from '@/components/WorkoutTemplatesPanel'
+import WorkoutSessionPanel from '@/components/WorkoutSessionPanel'
 
 export default {
   components: {
-    TemplatesPanel,
-    ActivityPanel
+    WorkoutTemplatesPanel,
+    WorkoutSessionPanel
   },
   props: {
   },
@@ -20,7 +20,6 @@ export default {
   ],
   data () {
     return {
-      hasActiveWorkout: false
     }
   },
   computed: {
@@ -28,7 +27,6 @@ export default {
   methods: {
   },
   mounted () {
-    console.log('mounted')
   }
 }
 </script>

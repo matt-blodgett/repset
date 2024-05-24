@@ -1,13 +1,13 @@
 <template>
-  <v-container class="pa-0">
+  <v-sheet>
 
-    <h2>Start a Workout</h2>
+    <h2>{{ template.name }}</h2>
 
     <v-sheet v-for="(exercise, exerciseIndex) in template.exercises">
 
       <h3>{{ exercise.name }}</h3>
 
-      <v-container class="pa-0">
+      <v-sheet>
 
         <v-row no-gutters class="mt-2 mb-1">
           <v-col cols="1">
@@ -72,37 +72,50 @@
               class="text-none"
               block
               density="compact"
-              text="add set"
+              text="Add Set"
               @click="addSet(exerciseIndex)"
             />
           </v-col>
         </v-row>
 
-      </v-container>
+      </v-sheet>
 
     </v-sheet>
 
     <v-sheet>
-      <v-container class="pa-0">
-        <v-row no-gutters class="my-4">
-          <v-col cols="12">
-            <v-btn
-              color="primary"
-              class="text-none"
-              block
-              density="compact"
-              prepend-icon="mdi-plus"
-              text="add exercise"
-              @click="addExercise()"
-            />
-          </v-col>
-        </v-row>
-      </v-container>
+      <v-row no-gutters class="my-4">
+        <v-col cols="12">
+          <v-btn
+            color="primary"
+            class="text-none"
+            block
+            density="compact"
+            prepend-icon="mdi-plus"
+            text="Add Exercises"
+            @click="addExercises()"
+          />
+        </v-col>
+      </v-row>
+      <v-row no-gutters class="my-4">
+        <v-col cols="12">
+          <v-btn
+            color="error"
+            class="text-none"
+            block
+            density="compact"
+            text="Cancel Workout"
+            @click="cancelWorkout()"
+          />
+        </v-col>
+      </v-row>
     </v-sheet>
 
-    <exercise-selector-dialog v-model="isExerciseSelectorDialogVisible" @selected="onExercisesSelected" />
+    <ExerciseSelectorDialog
+      v-model="isExerciseSelectorDialogVisible"
+      @click-selected="onExercisesSelected"
+    />
 
-  </v-container>
+  </v-sheet>
 </template>
 
 <script>
@@ -121,7 +134,7 @@ export default {
       isExerciseSelectorDialogVisible: false,
       isDeleteButtonsVisible: false,
       template: {
-        name: null,
+        name: 'Day 1',
         exercises: [
           {
             name: 'Squat (Barbell)',
@@ -205,14 +218,14 @@ export default {
     toggleFinishSet (exerciseIndex, setIndex) {
       this.template.exercises[exerciseIndex].sets[setIndex].complete = !this.template.exercises[exerciseIndex].sets[setIndex].complete
     },
-    addExercise () {
+    addExercises () {
       this.isExerciseSelectorDialogVisible = true
     },
     onExercisesSelected (data) {
       this.isExerciseSelectorDialogVisible = false
 
       data.forEach((excercise) => {
-        let sets = []
+        const sets = []
         for (let i = 0; i < 3; i++) {
           sets.push({
             previous: '',
@@ -227,6 +240,9 @@ export default {
           sets: sets
         })
       })
+    },
+    cancelWorkout () {
+      this.$store.commit('workoutSession/cancel')
     }
   }
 }

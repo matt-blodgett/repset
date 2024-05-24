@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-0">
+  <v-container>
     <v-bottom-navigation
       grow
       color="#FFFFFF"
