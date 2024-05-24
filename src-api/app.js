@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 8000
 
 
 const db = require('better-sqlite3')('repset.db')
@@ -9,12 +9,12 @@ const db = require('better-sqlite3')('repset.db')
 app.use(express.json())
 
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('Hello World!')
 })
 
 
-app.get('/exercises', (req, res) => {
+app.get('/api/exercises', (req, res) => {
   const sql = 'SELECT id, name, muscle_group FROM exercises'
   const params = []
   const stmt = db.prepare(sql)
@@ -23,7 +23,7 @@ app.get('/exercises', (req, res) => {
 })
 
 
-app.get('/workout_templates', (req, res) => {
+app.get('/api/workout_templates', (req, res) => {
   let sql = `
   SELECT id, name
   FROM workout_templates
@@ -76,7 +76,7 @@ app.get('/workout_templates', (req, res) => {
 })
 
 
-app.post('/test', (req, res) => {
+app.post('/api/test', (req, res) => {
   console.log(req.body)
   res.send('test')
 })

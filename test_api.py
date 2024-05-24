@@ -2,7 +2,7 @@ import json
 import requests
 
 
-url_base = 'http://localhost:3000'
+url_base = 'http://localhost:8000/api'
 
 
 # response = requests.post(

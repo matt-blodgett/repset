@@ -1,0 +1,22 @@
+services:
+  api:
+    build: "./src-api/."
+    volumes:
+      - "./src-api/:/code"
+      - "/code/node_modules"
+    ports:
+      - "8000:8000"
+    command: >
+      node app.js
+
+  ui:
+    build: "./src-ui/."
+    volumes:
+      - "./src-ui/:/code"
+      - "/code/node_modules"
+    ports:
+      - "8888:8888"
+    depends_on:
+      - "api"
+    command: >
+      yarn dev
