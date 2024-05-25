@@ -128,7 +128,7 @@ export default {
     },
     startWorkoutSession (workoutTemplate) {
       this.workoutTemplateDialog.isVisible = false
-      this.$store.commit('workoutSession/start', null)
+      this.$store.commit('workoutSession/start', workoutTemplate)
     }
   }
 }

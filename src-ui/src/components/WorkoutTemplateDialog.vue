@@ -26,8 +26,8 @@
             <template v-slot:prepend>
               <v-icon :icon="item.icon" />
             </template>
-            <v-list-item-title>{{ `${item.setCount} x ${item.name}` }}</v-list-item-title>
-            <v-list-item-subtitle>{{ item.muscleGroup }}</v-list-item-subtitle>
+            <v-list-item-title>{{ `${item.set_count} x ${item.name}` }}</v-list-item-title>
+            <v-list-item-subtitle>{{ item.muscle_group }}</v-list-item-subtitle>
           </v-list-item>
         </v-list>
 
@@ -63,12 +63,12 @@ export default {
     exerciseDetails () {
       const details = []
       this.workoutTemplate.exercises.forEach((item) => {
-        const exercise = this.$store.getters['user/getExercise'](exercise.exerciseId)
+        const exercise = item.exercise
         details.push({
           icon: 'mdi-help-circle-outline',
           name: exercise.name,
-          muscleGroup: exercise.muscleGroup,
-          setCount: item.sets.length
+          muscle_group: exercise.muscle_group,
+          set_count: item.sets.length
         })
       })
       return details

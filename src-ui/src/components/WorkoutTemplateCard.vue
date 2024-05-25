@@ -19,8 +19,8 @@
             <v-list-item
               v-for="(item, index) in items"
               :key="index"
-              @click="$emit(item.eventName)"
               class="pa-2"
+              @click="$emit(item.eventName)"
             >
               <template v-slot:prepend>
                 <v-icon
@@ -87,7 +87,7 @@ export default {
     workoutTemplateExerciseNames () {
       let str = ''
       this.workoutTemplate.exercises.forEach((exercise) => {
-        let name = this.$store.getters['user/getExercise'](exercise.exerciseId).name
+        let name = exercise.exercise.name
         str += name + ', '
       })
       return str

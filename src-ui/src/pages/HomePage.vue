@@ -15,7 +15,7 @@
       </v-row>
     </v-sheet>
 
-    <v-btn color="primary" text="test" @click="test()" />
+    <v-btn color="primary" text="refresh" @click="refresh()" />
 
   </v-sheet>
 </template>
@@ -31,10 +31,9 @@ export default {
     }
   },
   methods: {
-    test () {
-      this.$apiClient.get('/api/exercises').then(response => {
-        console.log(response.data)
-      }).catch(err => console.log(err))
+    async refresh () {
+      await this.$store.dispatch('user/loadExercises')
+      await this.$store.dispatch('user/loadWorkoutTemplates')
     }
   }
 }

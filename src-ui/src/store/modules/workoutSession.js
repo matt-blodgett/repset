@@ -1,15 +1,18 @@
 const state = {
-  isActive: false
+  isActive: false,
+  selectedWorkoutTemplate: null
 }
 
 const getters = {
 }
 
 const mutations = {
-  start (state, template) {
+  start (state, workoutTemplate) {
+    state.selectedWorkoutTemplate = workoutTemplate
     state.isActive = true
   },
   cancel (state) {
+    state.selectedWorkoutTemplate = null
     state.isActive = false
   }
 }

@@ -1,11 +1,11 @@
 <template>
   <v-sheet>
 
-    <h2>{{ template.name }}</h2>
+    <h2>{{ workoutSession.name }}</h2>
 
-    <v-sheet v-for="(exercise, exerciseIndex) in template.exercises">
+    <v-sheet v-for="(exercise, exerciseIndex) in workoutSession.exercises">
 
-      <h3>{{ exercise.name }}</h3>
+      <h3>{{ exercise.exercise.name }}</h3>
 
       <v-sheet>
 
@@ -38,7 +38,7 @@
             <div class="text-center">{{ setIndex + 1 }}</div>
           </v-col>
           <v-col cols="5">
-            <div class="text-center">{{ set.previous }}</div>
+            <div class="text-center">{{ set.previous || 'No previous' }}</div>
           </v-col>
           <v-spacer />
           <v-col cols="2">
@@ -53,7 +53,7 @@
             <v-icon
               :color="set.complete ? 'green': ''"
               icon="mdi-check-bold"
-              @click="toggleFinishSet(exerciseIndex, setIndex)"
+              @click="toggleSetCompleted(exerciseIndex, setIndex)"
             />
           </v-col>
           <v-col cols="1" class="px-1" v-if="isDeleteButtonsVisible">
@@ -133,75 +133,18 @@ export default {
     return {
       isExerciseSelectorDialogVisible: false,
       isDeleteButtonsVisible: false,
-      template: {
-        name: 'Day 1',
-        exercises: [
-          {
-            name: 'Squat (Barbell)',
-            sets: [
-              {
-                previous: '225 lb x 8 @ 8.5',
-                weight: 230,
-                reps: 8,
-                rpe: 8.5,
-                complete: false
-              },
-              {
-                previous: '225 lb x 8 @ 9',
-                weight: 230,
-                reps: 8,
-                rpe: 9,
-                complete: false
-              },
-              {
-                previous: '225 lb x 8 @ 9.5',
-                weight: 230,
-                reps: 8,
-                rpe: 9.5,
-                complete: false
-              }
-            ]
-          },
-          {
-            name: 'Chest Press (Dumbell)',
-            sets: [
-              {
-                previous: '60 lb x 9 @ 8.5',
-                weight: 60,
-                reps: 10,
-                rpe: 8.5,
-                complete: false
-              },
-              {
-                previous: '60 lb x 9 @ 9',
-                weight: 60,
-                reps: 10,
-                rpe: 9,
-                complete: false
-              },
-              {
-                previous: '60 lb x 9 @ 9.5',
-                weight: 60,
-                reps: 10,
-                rpe: 9.5,
-                complete: false
-              }
-            ]
-          }
-        ]
+      workoutSession: {
+        name: 'New Workout',
+        exercises: []
       }
     }
   },
   computed: {
   },
   methods: {
-    test () {
-      console.log(this.template)
-    },
     addSet (exerciseIndex) {
-      this.template.exercises[exerciseIndex].sets.push(
+      this.workoutSession.exercises[exerciseIndex].sets.push(
         {
-          previous: '',
           weight: null,
           reps: null,
           rpe: null,
@@ -210,13 +153,13 @@ export default {
       )
     },
     removeSet (exerciseIndex, setIndex) {
-      if (this.template.exercises[exerciseIndex].sets.length === 1) {
+      if (this.workoutSession.exercises[exerciseIndex].sets.length === 1) {
         return
       }
-      this.template.exercises[exerciseIndex].sets.splice(setIndex, 1)
+      this.workoutSession.exercises[exerciseIndex].sets.splice(setIndex, 1)
     },
-    toggleFinishSet (exerciseIndex, setIndex) {
-      this.template.exercises[exerciseIndex].sets[setIndex].complete = !this.template.exercises[exerciseIndex].sets[setIndex].complete
+    toggleSetCompleted (exerciseIndex, setIndex) {
+      this.workoutSession.exercises[exerciseIndex].sets[setIndex].complete = !this.workoutSession.exercises[exerciseIndex].sets[setIndex].complete
     },
     addExercises () {
       this.isExerciseSelectorDialogVisible = true
@@ -224,25 +167,29 @@ export default {
     onExercisesSelected (data) {
       this.isExerciseSelectorDialogVisible = false
 
-      data.forEach((excercise) => {
+      data.forEach((exercise) => {
         const sets = []
         for (let i = 0; i < 3; i++) {
           sets.push({
-            previous: '',
             weight: null,
             reps: null,
             rpe: null,
             complete: false
           })
         }
-        this.template.exercises.push({
-          name: excercise.name,
+        this.workoutSession.exercises.push({
+          exercise: exercise,
           sets: sets
         })
       })
     },
     cancelWorkout () {
       this.$store.commit('workoutSession/cancel')
+    }
+  },
+  mounted () {
+    if (this.$store.state.workoutSession.selectedWorkoutTemplate) {
+      this.workoutSession = JSON.parse(JSON.stringify(this.$store.state.workoutSession.selectedWorkoutTemplate))
     }
   }
 }

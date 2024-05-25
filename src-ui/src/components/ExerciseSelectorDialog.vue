@@ -12,7 +12,7 @@
               </v-list-item-action>
             </template>
             <v-list-item-title>{{ item.name }}</v-list-item-title>
-            <v-list-item-subtitle>{{ item.muscleGroup }}</v-list-item-subtitle>
+            <v-list-item-subtitle>{{ item.muscle_group }}</v-list-item-subtitle>
           </v-list-item>
         </v-list>
       </v-sheet>
