@@ -14,11 +14,23 @@ def init_database_schema():
 
     cursor.execute(
         """
+        CREATE TABLE users (
+            id INTEGER PRIMARY KEY,
+            username NVARCHAR(50) NOT NULL,
+            password_hash NVARCHAR(128) NOT NULL,
+            email NVARCHAR(255),
+            UNIQUE(username, email)
+        )
+        """
+    )
+
+    cursor.execute(
+        """
         CREATE TABLE exercises (
             id INTEGER PRIMARY KEY,
             name NVARCHAR(50) NOT NULL,
             muscle_group NVARCHAR(50) NOT NULL
-        );
+        )
         """
     )
 
@@ -27,7 +39,7 @@ def init_database_schema():
         CREATE TABLE workout_templates (
             id INTEGER PRIMARY KEY,
             name NVARCHAR(50) NOT NULL
-        );
+        )
         """
     )
 
@@ -47,7 +59,7 @@ def init_database_schema():
                 REFERENCES exercises (id)
                     ON UPDATE CASCADE
                     ON DELETE CASCADE
-        );
+        )
         """
     )
 
@@ -65,7 +77,7 @@ def init_database_schema():
                 REFERENCES workout_template_exercises (id)
                     ON UPDATE CASCADE
                     ON DELETE CASCADE
-        );
+        )
         """
     )
 
@@ -320,7 +332,6 @@ def init_database_data():
         [20, 2, 235, 8, 8.5],
         [20, 3, 235, 8, 8.5],
     ])
-
 
     connection.commit()
     connection.close()

@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     command: >
-      node app.js
+      node --env-file=.env app.js
 
   ui:
     build: "./src-ui/."

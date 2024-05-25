@@ -1,18 +1,120 @@
 const express = require('express')
 const app = express()
-const port = 8000
+const PORT = process.env.PORT
 
+const { expressjwt } = require('express-jwt')
+const jwt = require('jsonwebtoken')
+const SECRET = process.env.SECRET
 
+const bcrypt = require('bcrypt')
 const db = require('better-sqlite3')('repset.db')
 
 
 app.use(express.json())
 
 
-app.get('/api', (req, res) => {
-  res.send('Hello World!')
+app.use(
+  expressjwt({
+    secret: SECRET,
+    algorithms: ['HS256'],
+    onExpired: async (req, err) => {
+      if (new Date() - err.inner.expiredAt < 5000) {
+        return
+      }
+      throw err
+    },
+  }).unless({
+    path: [
+      '/api/auth',
+      '/api/register'
+    ]
+  })
+)
+
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    if (err.inner.name === 'TokenExpiredError') {
+      res.status(401).send({'error': 'token expired'})
+    } else {
+      res.status(401).send({'error': 'token invalid'})
+    }
+  } else {
+    next(err)
+  }
 })
 
+
+// app.use((req, res, next) => {
+//   console.log(req.headers)
+//   next()
+// })
+
+
+app.post('/api/register', (req, res) => {
+  const username = req.body['username']
+  const password = req.body['password']
+  const email = req.body['email']
+
+  const saltRounds = 10
+
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    const sql = `
+    INSERT INTO users (username, password_hash, email)
+    VALUES (?, ?, ?)
+    `
+    const params = [username, hash, email]
+    const stmt = db.prepare(sql)
+    stmt.run(params)
+
+    res.status(200).send({'message': 'success'})
+  })
+})
+
+app.post('/api/auth', (req, res) => {
+  const username = req.body['username']
+  const password = req.body['password']
+
+  const sql = `
+  SELECT password_hash, email
+  FROM users
+  WHERE username = ?
+  `
+  const params = [username]
+  const stmt = db.prepare(sql)
+  const user = stmt.get(params)
+
+  if (!user) {
+    res.status(400).send({'error': 'incorrect username or password'})
+    return
+  }
+
+  const hash = user.password_hash
+
+  bcrypt.compare(password, hash, (err, result) => {
+    if (!result) {
+      res.status(400).send({'error': 'incorrect username or password'})
+      return
+    }
+
+    const userProfile = {
+      username: username,
+      email: user.email
+    }
+
+    const token = jwt.sign(
+      userProfile,
+      SECRET,
+      { expiresIn: 60 * 60 }
+    )
+
+    const data = {
+      profile: userProfile,
+      token: token
+    }
+
+    res.status(200).send(data)
+  })
+})
 
 app.get('/api/exercises', (req, res) => {
   const sql = `
@@ -24,7 +126,6 @@ app.get('/api/exercises', (req, res) => {
   const rows = stmt.all(params)
   res.status(200).send(rows)
 })
-
 
 app.get('/api/workout_templates', (req, res) => {
   let sql = `
@@ -79,13 +180,6 @@ app.get('/api/workout_templates', (req, res) => {
 })
 
 
-app.post('/api/test', (req, res) => {
-  console.log(req.body)
-  res.send('test')
-})
-
-
-
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`)
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`)
 })
