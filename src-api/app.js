@@ -15,7 +15,10 @@ app.get('/api', (req, res) => {
 
 
 app.get('/api/exercises', (req, res) => {
-  const sql = 'SELECT id, name, muscle_group FROM exercises'
+  const sql = `
+  SELECT id, name, muscle_group
+  FROM exercises
+  `
   const params = []
   const stmt = db.prepare(sql)
   const rows = stmt.all(params)

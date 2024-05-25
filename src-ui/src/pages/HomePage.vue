@@ -15,6 +15,8 @@
       </v-row>
     </v-sheet>
 
+    <v-btn color="primary" text="test" @click="test()" />
+
   </v-sheet>
 </template>
 
@@ -26,6 +28,13 @@ export default {
         name: 'Matt B',
         workouts: 32
       }
+    }
+  },
+  methods: {
+    test () {
+      this.$apiClient.get('/api/exercises').then(response => {
+        console.log(response.data)
+      }).catch(err => console.log(err))
     }
   }
 }
