@@ -39,11 +39,9 @@
 
 <script>
 export default {
-  data () {
-    return {
-      exerciseOptions: []
-    }
-  },
+  data: () => ({
+    exerciseOptions: []
+  }),
   computed: {
     selectedOptions () {
       return this.exerciseOptions.filter((opt) => opt.selected)
@@ -67,3 +65,6 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+</style>

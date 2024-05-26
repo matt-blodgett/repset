@@ -62,24 +62,22 @@ export default {
       required: true
     }
   },
-  data () {
-    return {
-      items: [
-        {
-          label: 'Edit',
-          icon: 'mdi-pencil-outline',
-          iconColor: 'rgb(95, 252, 246)',
-          eventName: 'click-edit'
-        },
-        {
-          label: 'Delete',
-          icon: 'mdi-close',
-          iconColor: 'rgb(255, 59, 59)',
-          eventName: 'click-delete'
-        }
-      ]
-    }
-  },
+  data: () => ({
+    items: [
+      {
+        label: 'Edit',
+        icon: 'mdi-pencil-outline',
+        iconColor: 'rgb(95, 252, 246)',
+        eventName: 'click-edit'
+      },
+      {
+        label: 'Delete',
+        icon: 'mdi-close',
+        iconColor: 'rgb(255, 59, 59)',
+        eventName: 'click-delete'
+      }
+    ]
+  }),
   computed: {
     workoutTemplateName () {
       return this.workoutTemplate.name

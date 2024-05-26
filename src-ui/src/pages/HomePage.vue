@@ -9,8 +9,8 @@
           <v-icon icon="mdi-account-circle-outline" size="4rem" color="#343434" />
         </v-col>
         <v-col cols="auto">
-          <div>{{ profile.name }}</div>
-          <div>{{ profile.workouts.toString() + ' workouts' }}</div>
+          <div>{{ $store.state.user.userProfile.username }}</div>
+          <div>{{ '32 workouts' }}</div>
         </v-col>
       </v-row>
     </v-sheet>
@@ -22,14 +22,8 @@
 
 <script>
 export default {
-  data () {
-    return {
-      profile: {
-        name: 'Matt B',
-        workouts: 32
-      }
-    }
-  },
+  data: () => ({
+  }),
   methods: {
     async refresh () {
       await this.$store.dispatch('user/loadExercises')

@@ -1,13 +1,15 @@
 import { apiClient } from '@/api'
 
 const state = {
-  profile: {
-    username: 'username',
-    name: 'Matt B'
+  userProfile: {
+    username: null,
+    email: null
   },
+  apiToken: null,
+
+  folders: [],
   exercises: [],
-  workoutTemplates: [],
-  folders: []
+  workoutTemplates: []
 }
 
 const getters = {
@@ -23,6 +25,17 @@ const getters = {
 }
 
 const mutations = {
+  setUserProfile (state, data) {
+    state.userProfile = data
+  },
+  setApiToken (state, data) {
+    state.apiToken = data
+    if (data) {
+      apiClient.defaults.headers.common['Authorization'] = `Bearer ${state.apiToken}`
+    } else {
+      delete apiClient.defaults.headers.common['Authorization']
+    }
+  },
   setExercises (state, data) {
     state.exercises = data
   },
@@ -44,6 +57,22 @@ const mutations = {
 }
 
 const actions = {
+  login ({ dispatch, commit, state }, data) {
+    return new Promise((resolve, reject) => {
+      apiClient.post('/api/auth', data).then(response => {
+        commit('setUserProfile', response.data['profile'])
+        commit('setApiToken', response.data['token'])
+        resolve(true)
+      }).catch(error => {
+        dispatch('logout')
+        reject(error)
+      })
+    })
+  },
+  logout ({ dispatch, commit, state}) {
+    commit('setUserProfile', {})
+    commit('setApiToken', null)
+  },
   loadExercises ({ dispatch, commit, state }) {
     return new Promise((resolve, reject) => {
       apiClient.get('/api/exercises').then(response => {

@@ -18,10 +18,9 @@ export default {
   },
   emits: [
   ],
-  data () {
-    return {
-    }
-  },
+  data: () => ({
+
+  }),
   computed: {
   },
   methods: {

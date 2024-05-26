@@ -100,14 +100,12 @@ export default {
     WorkoutTemplateDialog,
     WorkoutTemplateCard
   },
-  data () {
-    return {
-      workoutTemplateDialog: {
-        isVisible: false,
-        workoutTemplate: null
-      }
+  data: () => ({
+    workoutTemplateDialog: {
+      isVisible: false,
+      workoutTemplate: null
     }
-  },
+  }),
   methods: {
     test () {
       console.log(this.$store)
@@ -133,3 +131,6 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+</style>

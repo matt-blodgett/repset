@@ -129,16 +129,14 @@ export default {
   },
   emits: [
   ],
-  data () {
-    return {
-      isExerciseSelectorDialogVisible: false,
-      isDeleteButtonsVisible: false,
-      workoutSession: {
-        name: 'New Workout',
-        exercises: []
-      }
+  data: () => ({
+    isExerciseSelectorDialogVisible: false,
+    isDeleteButtonsVisible: false,
+    workoutSession: {
+      name: 'New Workout',
+      exercises: []
     }
-  },
+  }),
   computed: {
   },
   methods: {

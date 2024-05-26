@@ -55,10 +55,8 @@ export default {
       required: true
     }
   },
-  data () {
-    return {
-    }
-  },
+  data: () => ({
+  }),
   computed: {
     exerciseDetails () {
       const details = []

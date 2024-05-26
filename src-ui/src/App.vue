@@ -1,21 +1,16 @@
 <template>
-  <v-app>
+  <v-app style="background-color: orange;">
 
-    <v-main class="pa-4">
+    <v-main>
       <router-view />
     </v-main>
-
-    <BottomNavBar />
 
   </v-app>
 </template>
 
 <script>
-import BottomNavBar from '@/components/BottomNavBar'
-
-export default {
-  components: {
-    BottomNavBar
-  }
-}
+export default {}
 </script>
+
+<style scoped>
+</style>

@@ -1,18 +1,19 @@
-// Plugins
-import Components from 'unplugin-vue-components/vite'
 import Vue from '@vitejs/plugin-vue'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import ViteFonts from 'unplugin-fonts/vite'
-import VueRouter from 'unplugin-vue-router/vite'
+import Components from 'unplugin-vue-components/vite'
 
-// Utilities
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 
+
+const APP_VERSION = require('./package.json').version
+
+
 // https://vitejs.dev/config/
 export default defineConfig({
+  appType: 'spa',
   plugins: [
-    VueRouter(),
     Vue({
       template: { transformAssetUrls }
     }),
@@ -33,7 +34,12 @@ export default defineConfig({
       },
     }),
   ],
-  define: { 'process.env': {} },
+  base: '/',
+  define: {
+    'process.env': {
+      APP_VERSION: APP_VERSION
+    }
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -48,6 +54,9 @@ export default defineConfig({
       '.vue',
     ],
   },
+  optimizeDeps: {
+    exclude: ['vuetify']
+  },
   server: {
     host: true,
     port: 8888,
@@ -61,4 +70,10 @@ export default defineConfig({
       }
     },
   },
+  // css: {
+  //   devSourcemap: true
+  // },
+  // build: {
+  //   sourcemap: true
+  // }
 })
