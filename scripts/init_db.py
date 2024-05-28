@@ -2,7 +2,7 @@ import os
 import sqlite3
 
 
-PATH_DB = './src-api/repset.db'
+PATH_DB = '../src-api/repset.db'
 
 
 def init_database_schema():
@@ -17,7 +17,7 @@ def init_database_schema():
         CREATE TABLE users (
             id INTEGER PRIMARY KEY,
             username NVARCHAR(50) NOT NULL,
-            password_hash NVARCHAR(128) NOT NULL,
+            password NVARCHAR(128) NOT NULL,
             email NVARCHAR(255),
             UNIQUE(username, email)
         )
