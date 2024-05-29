@@ -44,7 +44,12 @@
 
     <v-row no-gutters class="mt-1">
       <v-col cols="2">
-        <v-icon icon="mdi-clock" size="medium" class="mt-n2" color="#888888" />
+        <v-icon
+          icon="mdi-clock"
+          size="medium"
+          class="mt-n2"
+          color="#888888"
+        />
       </v-col>
       <v-col cols="auto">
         <div class="workout-template-card-date ml-n1">{{ workoutTemplateLastCompletedDate }}</div>

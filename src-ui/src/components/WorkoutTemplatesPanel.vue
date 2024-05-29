@@ -92,8 +92,8 @@
 </template>
 
 <script>
-import WorkoutTemplateDialog from '@/components/WorkoutTemplateDialog'
-import WorkoutTemplateCard from '@/components/WorkoutTemplateCard'
+import WorkoutTemplateDialog from '@/components/WorkoutTemplateDialog.vue'
+import WorkoutTemplateCard from '@/components/WorkoutTemplateCard.vue'
 
 export default {
   components: {
@@ -107,9 +107,6 @@ export default {
     }
   }),
   methods: {
-    test () {
-      console.log(this.$store)
-    },
     createNewFolder () {
     },
     createNewWorkoutTemplate () {

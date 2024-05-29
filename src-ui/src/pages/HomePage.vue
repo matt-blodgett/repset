@@ -1,5 +1,5 @@
 <template>
-  <v-sheet>
+  <v-sheet class="fill-height">
 
     <h2 class="mb-4">Home</h2>
 

@@ -7,7 +7,9 @@
 
         <v-row no-gutters>
           <v-col cols="auto">
-            <v-icon icon="mdi-pencil-outline" />
+            <v-icon
+              icon="mdi-pencil-outline"
+            />
           </v-col>
           <v-spacer />
           <v-col cols="auto">
@@ -15,7 +17,10 @@
           </v-col>
           <v-spacer />
           <v-col cols="auto">
-            <v-icon icon="mdi-close" @click="$emit('update:modelValue', false)" />
+            <v-icon
+              icon="mdi-close"
+              @click="$emit('update:modelValue', false)"
+            />
           </v-col>
         </v-row>
 

@@ -1,5 +1,5 @@
 <template>
-  <v-sheet>
+  <v-sheet class="fill-height">
 
     <h2 class="mb-4">Settings</h2>
 
@@ -12,6 +12,7 @@
 export default {
   methods: {
     logout () {
+      this.$store.dispatch('user/logout')
       this.$router.push({ path: '/login' })
     }
   }

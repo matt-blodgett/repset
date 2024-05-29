@@ -1,40 +1,96 @@
 <template>
-  <!-- <v-sheet style="background-color: purple; min-width: 200px; min-height: 200px;"> -->
+  <v-sheet class="fill-height d-flex justify-center align-center">
+    <v-sheet :border="true" class="pa-6 mx-auto" rounded width="85vw" max-width="450px">
 
-    <v-layout>
-      <v-btn text="register" color="green" @click="register()" />
-      <v-btn text="login" color="green" @click="login()" />
-    </v-layout>
+      <h2 class="text-h5 mb-6">Login</h2>
 
+      <v-alert
+        class="my-6"
+        closable
+        color="error"
+        icon="mdi-alert"
+        title="Login Failed"
+        text="Invalid username or password"
+        v-model="isErrorSubmit"
+      />
 
-  <!-- </v-sheet> -->
+      <v-form ref="form" fast-fail @submit.prevent="submit">
+
+        <v-text-field
+          label="Email"
+          type="email"
+          autocomplete="email"
+          v-model="formData.email"
+          :maxlength="30"
+          counter
+          prepend-inner-icon="mdi-account"
+          @keyup.enter="submit()"
+        />
+
+        <v-text-field
+          label="Password"
+          :type="passwordFieldType"
+          v-model="formData.password"
+          autocomplete="current-password"
+          :append-inner-icon="passwordFieldType === 'password' ? 'mdi-eye' : 'mdi-eye-off'"
+          @click:append-inner="passwordFieldType = passwordFieldType === 'password' ? 'text' : 'password'"
+          prepend-inner-icon="mdi-lock-outline"
+          @keyup.enter="submit()"
+        />
+
+        <div class="text-right">
+          <a href="/reset-password">Forgot password?</a>
+        </div>
+
+        <v-divider class="my-4" />
+
+        <div class="text-center mt-6">
+          <v-btn
+            color="primary"
+            block
+            text="Login"
+            @click="submit()"
+            :loading="isLoadingSubmit"
+          />
+        </div>
+      </v-form>
+
+      <div class="text-center mt-12">
+        <div>Not registered? <a href="/signup">Sign up now</a></div>
+      </div>
+
+    </v-sheet>
+  </v-sheet>
 </template>
 
 <script>
 export default {
-  methods: {
-    register () {
-      const data = {
-        username: 'matt3511',
-        password: 'testpass',
-        email: 'test@test.ca'
-      }
-      this.$apiClient.post('/api/register', data).then(response => {
-        console.log(response)
-      }).catch(error => {
-        console.log(error)
-      })
+  data: () => ({
+    isLoadingSubmit: false,
+    isErrorSubmit: false,
+    formData: {
+      email: null,
+      password: null
     },
-    login () {
-      const data = {
-        username: 'matt3511',
-        password: 'testpass'
+    passwordFieldType: 'password'
+  }),
+  methods: {
+    async submit () {
+      const { valid } = await this.$refs.form.validate()
+      if (!valid) {
+        return
       }
-      this.$store.dispatch('user/login', data).then(success => {
-        this.$router.push({ path: '/home' })
-      }).catch(error => {
+      this.isErrorSubmit = false
+      this.isLoadingSubmit = true
+      const success = await this.$store.dispatch('user/login', this.formData).catch(error => {
+        this.isErrorSubmit = true
+        this.isLoadingSubmit = false
         console.log(error)
       })
+      if (success) {
+        this.isLoadingSubmit = false
+        this.$router.push({ path: '/home' })
+      }
     }
   }
 }

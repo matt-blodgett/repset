@@ -1,9 +1,19 @@
 import { createStore } from 'vuex'
+import VuexPersistence from 'vuex-persist'
 
 import user from './modules/user'
 import workoutSession from './modules/workoutSession'
 
-export default createStore({
+const vuexLocal = new VuexPersistence({
+  key: 'repset',
+  storage: window.localStorage
+})
+
+const store = createStore({
+  strict: process.env.NODE_ENV !== 'production',
+  plugins: [
+    vuexLocal.plugin
+  ],
   modules: {
     user: {
       namespaced: true,
@@ -15,3 +25,5 @@ export default createStore({
     }
   }
 })
+
+export default store

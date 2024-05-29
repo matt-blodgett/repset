@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import ExerciseSelectorDialog from '@/components/ExerciseSelectorDialog'
+import ExerciseSelectorDialog from '@/components/ExerciseSelectorDialog.vue'
 
 export default {
   components: {
