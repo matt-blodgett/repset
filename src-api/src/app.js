@@ -3,11 +3,9 @@ const app = express()
 const PORT = process.env.PORT
 
 const { expressjwt } = require('express-jwt')
-const jwt = require('jsonwebtoken')
-const SECRET = process.env.SECRET
+const JWT_SECRET = process.env.JWT_SECRET
 
-const bcrypt = require('bcrypt')
-const db = require('better-sqlite3')('repset.db')
+const db = require('./db')
 
 
 app.use(express.json())
@@ -15,7 +13,7 @@ app.use(express.json())
 
 app.use(
   expressjwt({
-    secret: SECRET,
+    secret: JWT_SECRET,
     algorithms: ['HS256'],
     onExpired: async (req, err) => {
       if (new Date() - err.inner.expiredAt < 5000) {
@@ -26,7 +24,7 @@ app.use(
   }).unless({
     path: [
       '/api/auth',
-      '/api/register'
+      '/api/signup'
     ]
   })
 )
@@ -44,77 +42,76 @@ app.use((err, req, res, next) => {
 })
 
 
-// app.use((req, res, next) => {
-//   console.log(req.headers)
-//   next()
+const routesAuthorization = require('./authorization/routes')
+app.use('/api', routesAuthorization)
+
+
+// app.post('/api/signup', (req, res) => {
+//   const name = req.body['name']
+//   const email = req.body['email']
+//   const password = req.body['password']
+
+//   const saltRounds = 10
+
+//   bcrypt.hash(password, saltRounds, (err, hash) => {
+//     const sql = `
+//     INSERT INTO users (name, email, password)
+//     VALUES (?, ?, ?)
+//     `
+//     const params = [name, email, hash]
+//     const stmt = db.prepare(sql)
+//     stmt.run(params)
+
+//     res.status(201).send({'message': 'success'})
+//   })
 // })
 
+// app.post('/api/auth', (req, res) => {
+//   const email = req.body['email']
+//   const password = req.body['password']
 
-app.post('/api/register', (req, res) => {
-  const username = req.body['username']
-  const password = req.body['password']
-  const email = req.body['email']
+//   const sql = `
+//   SELECT email, password, name
+//   FROM users
+//   WHERE email = ?
+//   `
+//   const params = [email]
+//   const stmt = db.prepare(sql)
+//   const user = stmt.get(params)
 
-  const saltRounds = 10
+//   if (!user) {
+//     res.status(400).send({'error': 'incorrect email or password'})
+//     return
+//   }
 
-  bcrypt.hash(password, saltRounds, (err, hash) => {
-    const sql = `
-    INSERT INTO users (username, password, email)
-    VALUES (?, ?, ?)
-    `
-    const params = [username, hash, email]
-    const stmt = db.prepare(sql)
-    stmt.run(params)
+//   const hash = user.password
 
-    res.status(200).send({'message': 'success'})
-  })
-})
+//   bcrypt.compare(password, hash, (err, result) => {
+//     if (!result) {
+//       res.status(400).send({'error': 'incorrect email or password'})
+//       return
+//     }
 
-app.post('/api/auth', (req, res) => {
-  const email = req.body['email']
-  const password = req.body['password']
+//     const userProfile = {
+//       name: user.name,
+//       email: user.email
+//     }
 
-  const sql = `
-  SELECT password
-  FROM users
-  WHERE email = ?
-  `
-  const params = [email]
-  const stmt = db.prepare(sql)
-  const user = stmt.get(params)
+//     const token = jwt.sign(
+//       userProfile,
+//       SECRET,
+//       { expiresIn: 60 * 60 }
+//     )
 
-  if (!user) {
-    res.status(400).send({'error': 'incorrect email or password'})
-    return
-  }
+//     const data = {
+//       profile: userProfile,
+//       token: token
+//     }
 
-  const hash = user.password
+//     res.status(200).send(data)
+//   })
+// })
 
-  bcrypt.compare(password, hash, (err, result) => {
-    if (!result) {
-      res.status(400).send({'error': 'incorrect email or password'})
-      return
-    }
-
-    const userProfile = {
-      username: user.username,
-      email: email
-    }
-
-    const token = jwt.sign(
-      userProfile,
-      SECRET,
-      { expiresIn: 60 * 60 }
-    )
-
-    const data = {
-      profile: userProfile,
-      token: token
-    }
-
-    res.status(200).send(data)
-  })
-})
 
 app.get('/api/exercises', (req, res) => {
   const sql = `

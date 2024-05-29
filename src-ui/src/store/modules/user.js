@@ -2,7 +2,7 @@ import { apiClient } from '@/api'
 
 const state = {
   userProfile: {
-    username: null,
+    name: null,
     email: null
   },
   apiToken: null,
@@ -57,6 +57,19 @@ const mutations = {
 }
 
 const actions = {
+  signup ({ dispatch, commit, state}, data) {
+    return new Promise((resolve, reject) => {
+      apiClient.post('/api/signup', data).then(response => {
+        dispatch('login', data).then(response => {
+          resolve(true)
+        }).catch(error => {
+          reject(error)
+        })
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
   login ({ dispatch, commit, state }, data) {
     return new Promise((resolve, reject) => {
       apiClient.post('/api/auth', data).then(response => {

@@ -18,6 +18,17 @@
       <v-form ref="form" fast-fail @submit.prevent="submit">
 
         <v-text-field
+          label="Name"
+          v-model="formData.name"
+          :rules="formRules.name"
+          :maxlength="30"
+          counter
+          density="compact"
+          prepend-inner-icon="mdi-account-outline"
+          autocomplete="name"
+        />
+
+        <v-text-field
           label="Email"
           v-model="formData.email"
           :rules="formRules.email"
@@ -30,18 +41,6 @@
         />
 
         <v-text-field
-          label="Username"
-          v-model="formData.username"
-          :rules="formRules.username"
-          :error-messages="formErrorMessages.username"
-          :maxlength="30"
-          counter
-          density="compact"
-          prepend-inner-icon="mdi-account"
-          autocomplete="username"
-        />
-
-        <v-text-field
           label="Password"
           v-model="formData.password"
           :type="formTypes.password"
@@ -51,7 +50,7 @@
           prepend-inner-icon="mdi-lock-outline"
           :append-inner-icon="formTypes.password === 'password' ? 'mdi-eye' : 'mdi-eye-off'"
           @click:append-inner="formTypes.password = formTypes.password === 'password' ? 'text' : 'password'"
-          autocomplete="current-password"
+          autocomplete="new-password"
         />
 
         <v-text-field
@@ -91,8 +90,8 @@ export default {
     isLoadingSubmit: false,
     isErrorSubmit: false,
     formData: {
+      name: null,
       email: null,
-      username: null,
       password: null,
       confirmPassword: null
     },
@@ -111,16 +110,14 @@ export default {
           return true
         }
       ],
-      username: [
+      name: [
         value => {
           if (!value) {
             return 'Field is required'
           } else if (value.length < 3) {
-            return 'Username must be at least 3 characters long'
+            return 'Name must be at least 3 characters long'
           } else if (value.length > 30) {
-            return 'Username must be less than 30 characters long'
-          } else {
-            vm.checkUsernameExists(value)
+            return 'Name must be less than 30 characters long'
           }
           return true
         }
@@ -153,7 +150,7 @@ export default {
       ]
     },
     formErrorMessages: {
-      username: null,
+      // username: null,
       email: null
     },
     formTypes: {
@@ -162,16 +159,6 @@ export default {
     }
   }),
   methods: {
-    checkUsernameExists (username) {
-      // const url = '/users/check_exists'
-      // const params = {
-      //   type: 'username',
-      //   value: username
-      // }
-      // this.$apiClient.get(url, { params: params }).then(response => {
-      //   this.formErrorMessages.username = response.data.exists ? 'That username is already taken' : null
-      // })
-    },
     checkEmailExists (email) {
       // const url = '/users/check_exists'
       // const params = {
@@ -187,22 +174,15 @@ export default {
       if (!valid) {
         return
       }
-
       this.isErrorSubmit = false
       this.isLoadingSubmit = true
-
-      const response = await this.$apiClient.post('/api/register', this.formData).catch(error => {
-        console.log(error)
-        return
-      })
-
-      const success = await this.$store.dispatch('user/login', this.formData).catch(error => {
+      const success = await this.$store.dispatch('user/signup', this.formData).catch(error => {
         this.isErrorSubmit = true
         this.isLoadingSubmit = false
         console.log(error)
       })
+      this.isLoadingSubmit = false
       if (success) {
-        this.isLoadingSubmit = false
         this.$router.push({ path: '/home' })
       }
     }

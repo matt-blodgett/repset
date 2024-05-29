@@ -21,8 +21,7 @@
           type="email"
           autocomplete="email"
           v-model="formData.email"
-          :maxlength="30"
-          counter
+          :maxlength="255"
           prepend-inner-icon="mdi-account"
           @keyup.enter="submit()"
         />
@@ -56,7 +55,7 @@
       </v-form>
 
       <div class="text-center mt-12">
-        <div>Not registered? <a href="/signup">Sign up now</a></div>
+        <div>Don't have an account? <a href="/signup">Sign up now</a></div>
       </div>
 
     </v-sheet>
@@ -87,8 +86,8 @@ export default {
         this.isLoadingSubmit = false
         console.log(error)
       })
+      this.isLoadingSubmit = false
       if (success) {
-        this.isLoadingSubmit = false
         this.$router.push({ path: '/home' })
       }
     }

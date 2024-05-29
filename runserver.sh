@@ -1,2 +1,2 @@
 cd ./src-api/
-node --env-file=.env app.js
+node --env-file=.env ./src/app.js
