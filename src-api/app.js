@@ -59,7 +59,7 @@ app.post('/api/register', (req, res) => {
 
   bcrypt.hash(password, saltRounds, (err, hash) => {
     const sql = `
-    INSERT INTO users (username, password_hash, email)
+    INSERT INTO users (username, password, email)
     VALUES (?, ?, ?)
     `
     const params = [username, hash, email]
@@ -71,34 +71,34 @@ app.post('/api/register', (req, res) => {
 })
 
 app.post('/api/auth', (req, res) => {
-  const username = req.body['username']
+  const email = req.body['email']
   const password = req.body['password']
 
   const sql = `
-  SELECT password_hash, email
+  SELECT password
   FROM users
-  WHERE username = ?
+  WHERE email = ?
   `
-  const params = [username]
+  const params = [email]
   const stmt = db.prepare(sql)
   const user = stmt.get(params)
 
   if (!user) {
-    res.status(400).send({'error': 'incorrect username or password'})
+    res.status(400).send({'error': 'incorrect email or password'})
     return
   }
 
-  const hash = user.password_hash
+  const hash = user.password
 
   bcrypt.compare(password, hash, (err, result) => {
     if (!result) {
-      res.status(400).send({'error': 'incorrect username or password'})
+      res.status(400).send({'error': 'incorrect email or password'})
       return
     }
 
     const userProfile = {
-      username: username,
-      email: user.email
+      username: user.username,
+      email: email
     }
 
     const token = jwt.sign(
