@@ -5,6 +5,7 @@ const PORT = process.env.PORT
 const { expressjwt } = require('express-jwt')
 const JWT_SECRET = process.env.JWT_SECRET
 
+
 const db = require('./db')
 
 
@@ -30,15 +31,21 @@ app.use(
 )
 
 app.use((err, req, res, next) => {
+  console.log('custom error handler')
   if (err.name === 'UnauthorizedError') {
     if (err.inner.name === 'TokenExpiredError') {
-      res.status(401).send({'error': 'token expired'})
+      return res.status(401).send({ error: 'token expired' })
     } else {
-      res.status(401).send({'error': 'token invalid'})
+      return res.status(401).send({ error: 'token invalid' })
     }
   } else {
-    next(err)
+    return next(err)
   }
+})
+
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl}`)
+  next()
 })
 
 
@@ -121,7 +128,7 @@ app.get('/api/exercises', (req, res) => {
   const params = []
   const stmt = db.prepare(sql)
   const rows = stmt.all(params)
-  res.status(200).send(rows)
+  return res.status(200).send(rows)
 })
 
 app.get('/api/workout_templates', (req, res) => {
@@ -173,7 +180,7 @@ app.get('/api/workout_templates', (req, res) => {
     workout_templates[i]['exercises'] = exercises
   }
 
-  res.status(200).send(workout_templates)
+  return res.status(200).send(workout_templates)
 })
 
 

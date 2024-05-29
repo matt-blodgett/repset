@@ -626,15 +626,24 @@ def test_e2e():
     #     assert response.status_code == 201
 
 
-# response = requests.get(
-#     url=f'{URL_BASE}/workout_templates',
-#     headers={'Authorization': f'Bearer {token}'}
-# )
+    # response = requests.get(
+    #     url=f'{URL_BASE}/workout_templates',
+    #     headers={'Authorization': f'Bearer {token}'}
+    # )
 
-# print_response(response)
+    # print_response(response)
 
 
 
-if __name__ == '__main__':
-    test_e2e()
+response = requests.post(
+    url=f'{URL_BASE}/signup',
+    json={
+        'name': 'Matt',
+        'email': 'test@test.ca',
+        'password': 'testpass'
+    }
+)
 
+
+
+print_response(response)

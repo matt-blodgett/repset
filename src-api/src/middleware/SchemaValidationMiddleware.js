@@ -1,37 +1,29 @@
-const Ajv = require('ajv').default,
-  AJV_OPTS = {allErrors: true};
+const Ajv = require('ajv')
+const AJV_OPTS = { allErrors: true }
+const ajv = new Ajv(AJV_OPTS)
+
+const authorizationSchemas = require('../authorization/schemas')
+for (let key in authorizationSchemas) {
+  ajv.addSchema(authorizationSchemas[key], key)
+}
 
 module.exports = {
-
-  /**
-   * @description Compiles the schema provided in argument and validates the data for the
-   * compiled schema, and returns errors if any
-   *
-   * @param {Object} schema - AJV Schema to validate against
-   *
-   * @returns {Function} - Express request handler
-   */
-  verify: (schema) => {
-    if (!schema) {
-      throw new Error('Schema not provided');
-    }
+  validate: (schemaKey) => {
 
     return (req, res, next) => {
-      const { body } = req;
-      const ajv = new Ajv(AJV_OPTS);
-      const validate = ajv.compile(schema);
-      const isValid = validate(body);
+      const { body } = req
+      const checkValid = ajv.getSchema(schemaKey)
+      const isValid = checkValid(body)
 
       if (isValid) {
-        return next();
+        return next()
       }
 
-      return res.send({
-        status: false,
-        error: {
-          message: `Invalid Payload: ${ajv.errorsText(validate.errors)}`
+      return res.status(400).send(
+        {
+          error: `Malformed Request: ${ajv.errorsText(checkValid.errors)}`
         }
-      });
+      )
     }
   }
-};
+}

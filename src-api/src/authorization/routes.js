@@ -1,15 +1,20 @@
 const router = require('express').Router()
 
-const controller = require('./controller')
+const views = require('./views')
+
+const SchemaValidationMiddleware = require('../middleware/SchemaValidationMiddleware')
 
 router.post(
   '/auth',
-  controller.auth
+  views.auth
 )
 
 router.post(
   '/signup',
-  controller.signup
+  [
+    SchemaValidationMiddleware.validate('signup')
+  ],
+  views.signup
 )
 
 module.exports = router
