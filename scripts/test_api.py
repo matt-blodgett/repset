@@ -19,8 +19,8 @@ def print_response(response):
 # response = requests.post(
 #     url=f'{url_base}/register',
 #     json={
-#         'username': 'matt3511',
-#         'password': 'testpass1',
+#         'username': 'testuser',
+#         'password': 'testpass',
 #         'email': 'test@test.ca'
 #     }
 # )
@@ -30,7 +30,7 @@ def print_response(response):
 response = requests.post(
     url=f'{url_base}/auth',
     json={
-        'username': 'matt3511',
+        'username': 'testuser',
         'password': 'testpass1'
     }
 )
@@ -46,7 +46,7 @@ token = response.json()['token']
 # response = requests.post(
 #     url=f'{url_base}/test',
 #     json={
-#       'username': 'matt3511',
+#       'username': 'testuser',
 #       'password': 'testpass'
 #     }
 # )

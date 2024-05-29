@@ -2,7 +2,7 @@ import os
 import sqlite3
 
 
-PATH_DB = '../src-api/repset.db'
+PATH_DB = './src-api/repset.db'
 
 
 def init_database_schema():

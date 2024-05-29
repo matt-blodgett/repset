@@ -723,6 +723,11 @@ deep-is@^0.1.3:
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.4.tgz#a6f2dce612fadd2ef1f519b73551f17e85199831"
   integrity sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==
 
+deepmerge@^4.2.2:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.3.1.tgz#44b5f2147cd3b00d4b56137685966f26fd25dd4a"
+  integrity sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==
+
 define-data-property@^1.0.1, define-data-property@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/define-data-property/-/define-data-property-1.1.4.tgz#894dc141bb7d3060ae4366f6a0107e68fbe48c5e"
@@ -1182,7 +1187,7 @@ flat-cache@^3.0.4:
     keyv "^4.5.3"
     rimraf "^3.0.2"
 
-flatted@^3.2.9:
+flatted@^3.0.5, flatted@^3.2.9:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.3.1.tgz#21db470729a6734d4997002f439cb308987f567a"
   integrity sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==
@@ -2291,6 +2296,14 @@ vuetify@^3.6.7:
   version "3.6.7"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.6.7.tgz#f120799ad35b156c48a877aac4633c2250e79903"
   integrity sha512-oj7zrNbjKFlSS38449K9/ad9mc/o25bxuTFT9rs2AtSNnOA+BOLIVJCAPlmLGWoQGslPh80RzckXDedoifs+TQ==
+
+vuex-persist@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/vuex-persist/-/vuex-persist-3.1.3.tgz#518c722a2ca3026bcee5732f99d24f75cee0f3b6"
+  integrity sha512-QWOpP4SxmJDC5Y1+0+Yl/F4n7z27syd1St/oP+IYCGe0X0GFio0Zan6kngZFufdIhJm+5dFGDo3VG5kdkCGeRQ==
+  dependencies:
+    deepmerge "^4.2.2"
+    flatted "^3.0.5"
 
 vuex@^4.0.2:
   version "4.0.2"
