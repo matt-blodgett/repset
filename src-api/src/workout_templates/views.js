@@ -66,8 +66,8 @@ module.exports = {
 
     const stmt = db.prepare(
       `
-      INSERT INTO workout_templates (user_id, name)
-      VALUES(@user_id, @name)
+      INSERT INTO workout_templates (user_id, name, created_at, updated_at)
+      VALUES(@user_id, @name, datetime('now'), datetime('now'))
       `
     )
     const info = stmt.run({
@@ -80,8 +80,8 @@ module.exports = {
     workoutTemplate.exercises.forEach((workoutTemplateExercise) => {
       const stmt = db.prepare(
         `
-        INSERT INTO workout_template_exercises (workout_template_id, exercise_id)
-        VALUES (@workout_template_id, @exercise_id)
+        INSERT INTO workout_template_exercises (workout_template_id, exercise_id, created_at, updated_at)
+        VALUES (@workout_template_id, @exercise_id, datetime('now'), datetime('now'))
         `
       )
       const info = stmt.run({
@@ -94,8 +94,8 @@ module.exports = {
       workoutTemplateExercise.sets.forEach((workoutTemplateSet) => {
         const stmt = db.prepare(
           `
-          INSERT INTO workout_template_sets (workout_template_exercise_id, set_number, weight, reps, rpe)
-          VALUES (@workout_template_exercise_id, @set_number, @weight, @reps, @rpe)
+          INSERT INTO workout_template_sets (workout_template_exercise_id, set_number, weight, reps, rpe, created_at, updated_at)
+          VALUES (@workout_template_exercise_id, @set_number, @weight, @reps, @rpe, datetime('now'), datetime('now'))
           `
         )
         stmt.run({

@@ -92,8 +92,8 @@ module.exports = {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       const stmt = db.prepare(
         `
-        INSERT INTO users (name, email, password)
-        VALUES (@name, @email, @hash)
+        INSERT INTO users (name, email, password, created_at, updated_at)
+        VALUES (@name, @email, @hash, datetime('now'), datetime('now'))
         `
       )
 
