@@ -1,4 +1,5 @@
 const Ajv = require('ajv')
+
 const AJV_OPTS = { allErrors: true }
 const ajv = new Ajv(AJV_OPTS)
 
@@ -21,7 +22,7 @@ module.exports = {
 
       return res.status(400).send(
         {
-          error: `Malformed Request: ${ajv.errorsText(checkValid.errors)}`
+          error: `${ajv.errorsText(checkValid.errors)}`
         }
       )
     }

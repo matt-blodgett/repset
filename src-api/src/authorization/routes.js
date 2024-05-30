@@ -1,8 +1,7 @@
 const router = require('express').Router()
-
 const views = require('./views')
 
-const SchemaValidationMiddleware = require('../middleware/SchemaValidationMiddleware')
+const schemaValidationMiddleware = require('../middleware/schemaValidationMiddleware')
 
 router.post(
   '/auth',
@@ -10,10 +9,13 @@ router.post(
 )
 
 router.post(
+  '/validate',
+  views.validate
+)
+
+router.post(
   '/signup',
-  [
-    SchemaValidationMiddleware.validate('signup')
-  ],
+  schemaValidationMiddleware.validate('signup'),
   views.signup
 )
 

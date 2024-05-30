@@ -23,6 +23,19 @@ def get_response(session, endpoint, method, ):
 def test_e2e():
     session = requests.Session()
 
+    # --------------------------------------------------
+    response = session.post(
+        url=f'{URL_BASE}/validate',
+        json={
+            'type': 'email',
+            'value': 'test@test.ca'
+        }
+    )
+
+    assert response.status_code == 200
+    assert response.json()['valid']
+
+    # --------------------------------------------------
     response = session.post(
         url=f'{URL_BASE}/signup',
         json={
@@ -34,6 +47,7 @@ def test_e2e():
 
     assert response.status_code == 201
 
+    # --------------------------------------------------
     response = session.post(
         url=f'{URL_BASE}/auth',
         json={
@@ -44,16 +58,32 @@ def test_e2e():
 
     assert response.status_code == 200
     assert response.json()['token']
+    assert response.json()['profile']
 
     token = response.json()['token']
     session.headers['Authorization'] = f'Bearer {token}'
 
+    # --------------------------------------------------
+    response = session.post(
+        url=f'{URL_BASE}/validate',
+        json={
+            'type': 'email',
+            'value': 'test@test.ca'
+        }
+    )
+
+    assert response.status_code == 200
+    assert not response.json()['valid']
+
+    # --------------------------------------------------
     response = session.get(
         url=f'{URL_BASE}/exercises'
     )
 
+    assert response.status_code == 200
     assert len(response.json()) > 0
 
+    # --------------------------------------------------
     workout_templates = [
         {
             "name": "Day 1",
@@ -614,36 +644,157 @@ def test_e2e():
                     ]
                 }
             ]
+        },
+        {
+            "name": "Day 5",
+            "exercises": [
+                {
+                    "exercise": {
+                        "id": 3,
+                        "name": "Leg Extension (Machine)",
+                        "muscle_group": "legs"
+                    },
+                    "sets": [
+                        {
+                            "set_number": 1,
+                            "weight": 235,
+                            "reps": 8,
+                            "rpe": 8.5
+                        },
+                        {
+                            "set_number": 2,
+                            "weight": 235,
+                            "reps": 8,
+                            "rpe": 8.5
+                        },
+                        {
+                            "set_number": 3,
+                            "weight": 235,
+                            "reps": 8,
+                            "rpe": 8.5
+                        }
+                    ]
+                },
+                {
+                    "exercise": {
+                        "id": 4,
+                        "name": "Lat Pulldown (Single Arm)",
+                        "muscle_group": "back"
+                    },
+                    "sets": [
+                        {
+                            "set_number": 1,
+                            "weight": 235,
+                            "reps": 8,
+                            "rpe": 8.5
+                        },
+                        {
+                            "set_number": 2,
+                            "weight": 235,
+                            "reps": 8,
+                            "rpe": 8.5
+                        },
+                        {
+                            "set_number": 3,
+                            "weight": 235,
+                            "reps": 8,
+                            "rpe": 8.5
+                        }
+                    ]
+                },
+                {
+                    "exercise": {
+                        "id": 5,
+                        "name": "Bicep Curl (Machine)",
+                        "muscle_group": "arms"
+                    },
+                    "sets": [
+                        {
+                            "set_number": 1,
+                            "weight": 235,
+                            "reps": 8,
+                            "rpe": 8.5
+                        },
+                        {
+                            "set_number": 2,
+                            "weight": 235,
+                            "reps": 8,
+                            "rpe": 8.5
+                        },
+                        {
+                            "set_number": 3,
+                            "weight": 235,
+                            "reps": 8,
+                            "rpe": 8.5
+                        }
+                    ]
+                },
+                {
+                    "exercise": {
+                        "id": 6,
+                        "name": "Deadlift (Barbell)",
+                        "muscle_group": "back"
+                    },
+                    "sets": [
+                        {
+                            "set_number": 1,
+                            "weight": 235,
+                            "reps": 8,
+                            "rpe": 8.5
+                        },
+                        {
+                            "set_number": 2,
+                            "weight": 235,
+                            "reps": 8,
+                            "rpe": 8.5
+                        },
+                        {
+                            "set_number": 3,
+                            "weight": 235,
+                            "reps": 8,
+                            "rpe": 8.5
+                        }
+                    ]
+                }
+            ]
         }
     ]
 
-    # for workout_template in workout_templates:
-    #     response = session.post(
-    #         url=f'{URL_BASE}/workout_templates',
-    #         json=workout_template
-    #     )
+    for workout_template in workout_templates:
+        response = session.post(
+            url=f'{URL_BASE}/workout_templates',
+            json=workout_template
+        )
 
-    #     assert response.status_code == 201
+        assert response.status_code == 201
 
+    # --------------------------------------------------
+    response = session.get(
+        url=f'{URL_BASE}/workout_templates'
+    )
 
-    # response = requests.get(
-    #     url=f'{URL_BASE}/workout_templates',
-    #     headers={'Authorization': f'Bearer {token}'}
-    # )
+    assert response.status_code == 200
+    assert len(response.json()) > 0
 
-    # print_response(response)
+    # --------------------------------------------------
+    response = session.delete(
+        url=f'{URL_BASE}/workout_templates/5'
+    )
 
-
-
-response = requests.post(
-    url=f'{URL_BASE}/signup',
-    json={
-        'name': 'Matt',
-        'email': 'test@test.ca',
-        'password': 'testpass'
-    }
-)
+    assert response.status_code == 200
 
 
 
-print_response(response)
+# response = requests.post(
+#     url=f'{URL_BASE}/signup',
+#     json={
+#         'name': 'Matt',
+#         'email': 'test@test.ca',
+#         'password': 'testpass'
+#     }
+# )
+
+# print_response(response)
+
+
+test_e2e()
