@@ -12,7 +12,7 @@ router.post(
 )
 
 router.delete(
-  '/:workout_id',
+  '/:workout_session_id',
   views.delete
 )
 
