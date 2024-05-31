@@ -12,6 +12,8 @@ def init_database_schema():
     connection = sqlite3.connect(PATH_DB)
     cursor = connection.cursor()
 
+    # Users
+
     cursor.execute(
         """
         CREATE TABLE users (
@@ -25,6 +27,8 @@ def init_database_schema():
         )
         """
     )
+
+    # Exercises
 
     cursor.execute(
         """
@@ -43,6 +47,69 @@ def init_database_schema():
         )
         """
     )
+
+    # Workout Sessions
+
+    cursor.execute(
+        """
+        CREATE TABLE workout_sessions (
+            id INTEGER PRIMARY KEY,
+            user_id INTEGER NOT NULL,
+            name NVARCHAR(50) NOT NULL,
+            created_at DATETIME NOT NULL,
+            updated_at DATETIME NOT NULL,
+
+            FOREIGN KEY (user_id)
+                REFERENCES users (id)
+                    ON UPDATE CASCADE
+                    ON DELETE CASCADE
+        )
+        """
+    )
+
+    cursor.execute(
+        """
+        CREATE TABLE workout_session_exercises (
+            id INTEGER PRIMARY KEY,
+            workout_session_id INTEGER NOT NULL,
+            exercise_id INTEGER NOT NULL,
+            created_at DATETIME NOT NULL,
+            updated_at DATETIME NOT NULL,
+
+            FOREIGN KEY (workout_session_id)
+                REFERENCES workout_sessions (id)
+                    ON UPDATE CASCADE
+                    ON DELETE CASCADE
+
+            FOREIGN KEY (exercise_id)
+                REFERENCES exercises (id)
+                    ON UPDATE CASCADE
+                    ON DELETE CASCADE
+        )
+        """
+    )
+
+    cursor.execute(
+        """
+        CREATE TABLE workout_session_sets (
+            id INTEGER PRIMARY KEY,
+            workout_session_exercise_id INTEGER NOT NULL,
+            set_number TINYINT NOT NULL,
+            weight NUMERIC,
+            reps NUMERIC,
+            rpe NUMERIC,
+            created_at DATETIME NOT NULL,
+            updated_at DATETIME NOT NULL,
+
+            FOREIGN KEY (workout_session_exercise_id)
+                REFERENCES workout_session_exercises (id)
+                    ON UPDATE CASCADE
+                    ON DELETE CASCADE
+        )
+        """
+    )
+
+    # Workout Templates
 
     cursor.execute(
         """
